@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Class file Viewer</title>
+    <link href="./assets/css/index.css" rel="stylesheet" type="text/css">
+
+</head>
+<body>
+<script type="text/x-template" id="keyValueElement">
+    <span class="ce-label inline-block">{{item.key}}</span><span class="ce-value inline-block">{{item.value}}</span>
+</script>
+<!--classElement 组件模板-->
+<script type="text/x-template" id="classElement">
+
+    <div class="ce-wrap">
+        <h1 class="element-title">class main info</h1>
+        <ul class="ce-body clearfix">
+            <li class="ce-item"><span class="ce-label inline-block">minorVersion</span><span class="ce-value inline-block">{{classData.minorVersion}}</span></li>
+            <li class="ce-item"><span class="ce-label inline-block">majorVersion</span><span class="ce-value inline-block">{{classData.majorVersion}}</span></li>
+            <li class="ce-item"><span class="ce-label inline-block">constantPoolCount</span><span class="ce-value inline-block">{{classData.constantPoolCount}}</span></li>
+            <li class="ce-item"><span class="ce-label inline-block">accessFlagNames</span><span class="ce-value inline-block">{{classData.accessFlagNames}}</span></li>
+            <li class="ce-item"><span class="ce-label inline-block">thisClassName</span><span class="ce-value inline-block">{{classData.thisClassName}}</span></li>
+            <li class="ce-item"><span class="ce-label inline-block">supperClass</span><span class="ce-value inline-block">{{classData.supperClassName}}</span></li>
+            <li class="ce-item"><span class="ce-label inline-block">interfacesCount</span><span class="ce-value inline-block">{{classData.interfacesCount}}</span></li>
+            <li class="ce-item"><span class="ce-label inline-block">fieldsCount</span><span class="ce-value inline-block">{{classData.fieldsCount}}</span></li>
+            <li class="ce-item"><span class="ce-label inline-block">methodsCount</span><span class="ce-value inline-block">{{classData.methodsCount}}</span></li>
+            <li class="ce-item"><span class="ce-label inline-block">attributesCount</span><span class="ce-value inline-block">{{classData.attributesCount}}</span></li>
+        </ul>
+    </div>
+</script>
+
+
+<!--classElement 组件模板-->
+<script type="text/x-template" id="ConstantPoolElement">
+    <div class="ce-wrap">
+        <h1 class="element-title">constant pool Elements</h1>
+        <ul class="ce-body clearfix">
+            <li class="ce-item" >
+                <span class="ce-label inline-block">#{{_index}} {{type}}</span><span class="ce-value inline-block">{{value || index}}</span>
+
+            </li>
+        </ul>
+    </div>
+</script>
+
+<div id="app">
+    <class-element v-bind:class-data="classData"></class-element>
+
+    <!-- 常量池-->
+    <div>
+        <h1 class="element-title">constant pool Elements</h1>
+        <ul class="cpe-body clearfix">
+            <li class="cpe-item" v-for="constantPoolData in constantPool" >
+                <span class="cpe-label inline-block">{{constantPoolData.type}}</span>
+                <span class="cpe-value inline-block ellipsis"><span class="index-no">#{{constantPoolData._index + 1}}.</span>{{constantPoolData.value || constantPoolData._value || constantPoolData._values}}  <span class="index-no">{{constantPoolData._from_index}}</span></span>
+            </li>
+        </ul>
+    </div>
+
+
+    <div>
+        <h1 class="element-title">Fields elements</h1>
+        <ul class="cpe-body clearfix">
+            <li class="cpe-item" v-for="field in classData.fields" >
+                <span class="cpe-label inline-block">{{field.accessFlagNames}}</span>
+                <span class="cpe-value inline-block ellipsis"> {{field.name}} <span class="index-no">#{{field.nameIndex}}</span>  {{field.descriptor}} <span class="index-no">#{{field.descriptorIndex}}</span> {{field.attributesCount}}</span>
+            </li>
+        </ul>
+    </div>
+
+
+
+    <div>
+        <h1 class="element-title">Methods elements</h1>
+        <ul class="cpe-body clearfix">
+            <li class="cpe-item" v-for="method in classData.methods" >
+                <span class="cpe-label inline-block">{{method.accessFlagNames}}</span>
+                <span class="cpe-value inline-block ellipsis"> {{method.name}} <span class="index-no">#{{method.nameIndex}}</span>  {{method.descriptor}} <span class="index-no">#{{method.descriptorIndex}}</span> {{method.attributesCount}}</span>
+            </li>
+        </ul>
+    </div>
+
+
+</div>
+<script type="text/javascript" src="./data.js"></script>
+<script type="text/javascript" src="./vendor/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="./vendor/vue.min.js"></script>
+<script type="text/javascript" src="./assets/js/index.js"></script>
+</body>
+</html>

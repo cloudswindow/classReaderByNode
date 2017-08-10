@@ -23,12 +23,18 @@ module.exports = {
         // 3.0 解析主版本------------------------------------------------------------------------------------------------
         clazz.majorVersion = stream.read(2).readInt16BE();//16bit 整数大端序
 
-        // 4.1 获取常量池大小---------------------------------------------------------------------------------------------
-        clazz.constantPoolCount = stream.read(2).readInt16BE();
+        // 4.1 获取常量池大小，从1开始计数，需要减一-------------------------------------------------------------------------
+        clazz.constantPoolCount = stream.read(2).readInt16BE() - 1;
         clazz.constantPool = [];
-        // 4.2 解析常量池的每个常量
-        for (let i = 0; i < clazz.constantPoolCount - 1; i++) {
+        // 4.2 解析常量池的每个常量,
+        for (let i = 0; i < clazz.constantPoolCount ; i++) {
             clazz.constantPool.push(ConstantPoolReader.read(stream))
+        }
+
+        for (let i = 0; i < clazz.constantPool.length; i++) {
+            clazz.constantPool[i]._index = i;
+            clazz.constantPool[i]._from_index = '';
+            clazz.constantPool[i]._values = '';
         }
 
         // 初始化常量池的数据
@@ -38,8 +44,11 @@ module.exports = {
             let constant = clazz.constantPool[i];
             for (var name in constant) {
                 if (name === 'index') {
+                    constant._from_index = ('#' +constant.index);
                     constant._value = ConstantPoolUtil.findContentInPool(constant.index);
                 } else if (name.indexOf('Index') >= 0) {
+                    constant._from_index += ('#' + constant[name]);
+                    constant._values += ConstantPoolUtil.findContentInPool(constant[name])
                     constant['_' + name.substring(0, name.indexOf('Index')) + 'Value'] = ConstantPoolUtil.findContentInPool(constant[name])
                 }
             }

@@ -15,6 +15,7 @@ fsStream.on('readable', () => {
         console.log(JSON.stringify(result));
         loaded = true;
         fs.writeFileSync('../out/result.json',JSON.stringify(result))
+        fs.writeFileSync('../src/views/data.js',`window.classData=${JSON.stringify(result)}`)
     }
 });
 
